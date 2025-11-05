@@ -1,9 +1,9 @@
 # Todo:
-* Fix assignment (Function exists its just a question of how assignemt should work when you have both the value and the variable name)
+* Fix assignment. Function exists its just a question of how assignemt should work when you have both the value and the variable name. (Might have to do with Variabletables. I dont know.)
 
-* Evaluate binary expression (Same here, variables and function exist but not the logic of the evaluation)
+* Evaluate binary expression. Variables and function exist but not the logic of the evaluation.
 
-* Start building on the empty functions (All functions should be created and contain a basic docstring)
+* Start building on the empty functions. All functions should be created and contain a basic docstring.
 
 # Understanding via metaphors 
 
