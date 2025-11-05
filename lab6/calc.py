@@ -125,7 +125,7 @@ def output_expression(p):
 
 # ----- EXPRESSION -----
 
-# No functions for expressions in general. Instead, see the differenct
+# No functions for expressions in general. Instead, see the different
 # types of expressions: constants, variables and binary expressions.
 
 
