@@ -213,10 +213,10 @@ def is_constant(p):
     (* STATEMENTS är ett ensamt STATEMENT, eller ett STATEMENT följt av komma 
            och STATEMENTS (som i sin tur är 1 STATEMENT som möjligen följs av flera,
         och så vidare).  *)
-    STATEMENTS = 
+    STATEMENTS =
         STATEMENT
       | STATEMENT, COMMA, STATEMENTS ;
-    
+
     (* En sats kan vara en tilldelning, en upprepning, ett val,
        en inmatning eller en utmatning. *)
     STATEMENT =
