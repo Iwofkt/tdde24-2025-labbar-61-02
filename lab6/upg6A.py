@@ -1,5 +1,5 @@
 import calc as c
-
+variable_table = {}
 
 def exec_program(const_calc_program):
     """
@@ -9,6 +9,7 @@ def exec_program(const_calc_program):
       list structure.
     return: The result of executing the Calc program.
     """
+    variable_table.clear()
     p = const_calc_program
 
     if not c.is_program(p):
@@ -61,15 +62,22 @@ def exec_statement(statement):
     if c.is_assignment(statement):
         print("Assignment statement:", statement)
         return exec_assignment(statement)
+
     elif c.is_repetition(statement):
         print("Repetition statement:", statement)
         return exec_repetition(statement)
+
     elif c.is_selection(statement):
         print("Selection statement:", statement)
         return exec_selection(statement)
+
     elif c.is_output(statement):
         print("Output statement:", statement)
         return exec_output(statement)
+
+    elif c.is_binaryexpr(statement):
+        print("binary statement", statement)
+        return eval_binaryexpr(statement)
     else:
         raise Exception(f"Error: {statement} is not a valid Calc statement.")
 
@@ -85,6 +93,7 @@ def exec_assignment(statement):
     expression = c.assignment_expression(statement)
     value = eval_expr(expression)
     print(f"Assigning {value} to variable '{variable}'")
+    variable_table[variable] = value
 
     # Now we just need to store the value in the variable
 
@@ -124,6 +133,7 @@ def exec_output(statement):
     return: The result of executing the output statement.
     """
     print_expr = c.output_expression(statement)
+    print_expr = variable_table.get(print_expr, print_expr)
     print(print_expr)
 
 
@@ -161,6 +171,23 @@ def eval_binaryexpr(expression):
     left_expr = c.binaryexpr_left(expression)
     right_expr = c.binaryexpr_right(expression)
 
+    left_expr = eval_expr(left_expr)
+    right_expr = eval_expr(right_expr)
+    if binop == '+':
+        print(left_expr + right_expr)
+        return left_expr + right_expr
+    elif binop == '-':
+        print(left_expr - right_expr)
+        return left_expr - right_expr
+    elif binop == '*':
+        print(left_expr * right_expr)
+        return left_expr * right_expr
+    elif binop == '/':
+        print(left_expr / right_expr)
+        return left_expr / right_expr
+    else:
+        raise Exception(f"Error: {binop} is not a valid binary operator")
+
     # Evaluate left and right expressions
 
 
@@ -171,12 +198,19 @@ def eval_variable(expression):
     param: expression: list, A variable expression.
     return: The result of evaluating the variable expression.
     """
+    return variable_table.get(expression, expression)
 
 
 if __name__ == "__main__":
     program_set = ["calc", ["set", "a", 7]]
-    program_print_set = ["calc", ["print", "a"], ["set", "a", 0]]
+    program_print_set = ["calc",
+                         ["print", "a"],
+                         ["set", "a", 0],
+                         ["print", "a"]]
+    program_add = ["calc", [7, "+", 7]]
 
     exec_program(program_set)
     print("-----")
     exec_program(program_print_set)
+    print("-----")
+    exec_program(program_add)
