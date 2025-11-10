@@ -1,8 +1,8 @@
 import calc as c
-variable_table = {}
+import copy
 
 
-def exec_program(const_calc_program):
+def exec_program(const_calc_program, table: dict = {}):
     """
     PROGRAM = '[', "'calc'", COMMA, STATEMENTS, ']
     Execute a Calc program represented as a constant list structure.
@@ -11,7 +11,7 @@ def exec_program(const_calc_program):
       list structure.
     return: The result of executing the Calc program.
     """
-    variable_table.clear()
+
     p = const_calc_program
 
     if not c.is_program(p):
@@ -21,12 +21,11 @@ def exec_program(const_calc_program):
     statements = c.program_statements(p)
 
     # Execute the statements
-    result = exec_statements(statements)
+    variable_table = exec_statements(statements, table)
+    return variable_table
 
-    return result
 
-
-def exec_statements(statements):
+def exec_statements(statements, table):
     """
     STATEMENTS =
         STATEMENT
@@ -47,15 +46,15 @@ def exec_statements(statements):
     print("Rest statement:", rest_statements)
 
     # Execute the first statement
-    result = exec_statement(first_statement)
+    variable_table = exec_statement(first_statement, table)
 
     # Recursively execute the rest of the statements
-    exec_statements(rest_statements)
+    variable_table = exec_statements(rest_statements, variable_table)
 
-    return result
+    return variable_table
 
 
-def exec_statement(statement):
+def exec_statement(statement, table):
     """
     STATEMENT =
         ASSIGNMENT
@@ -73,11 +72,11 @@ def exec_statement(statement):
     # function
     if c.is_assignment(statement):
         print("Assignment statement:", statement)
-        return exec_assignment(statement)
+        return exec_assignment(statement, table)
 
     elif c.is_repetition(statement):
         print("Repetition statement:", statement)
-        return exec_repetition(statement)
+        return exec_repetition(statement, table)
 
     elif c.is_selection(statement):
         print("Selection statement:", statement)
@@ -85,17 +84,17 @@ def exec_statement(statement):
 
     elif c.is_input(statement):
         print("Input statement:", statement)
-        return exec_input(statement)
+        return exec_input(statement, table)
 
     elif c.is_output(statement):
         print("Output statement:", statement)
-        return exec_output(statement)
+        return exec_output(statement, table)
 
     else:
         raise Exception(f"Error: {statement} is not a valid Calc statement.")
 
 
-def exec_assignment(statement):
+def exec_assignment(statement, table):
     """
     ASSIGNMENT = '[', "'set'", COMMA, VARIABLE, COMMA, EXPRESSION, ']'
 
@@ -107,13 +106,15 @@ def exec_assignment(statement):
 
     variable = c.assignment_variable(statement)
     expression = c.assignment_expression(statement)
-    value = eval_expr(expression)
+    value = eval_expr(expression, table)
+    variable_table = copy.deepcopy(table)
 
     print(f"Assigning {value} to variable '{variable}'")
     variable_table[variable] = value
+    return variable_table
 
 
-def exec_repetition(statement):
+def exec_repetition(statement, table):
     """
     REPETITION = '[', "'while'", COMMA, CONDITION, COMMA, STATEMENTS, ']'
 
@@ -127,14 +128,14 @@ def exec_repetition(statement):
     statements = c.repetition_statements(statement)
     print("Repetition statements:", statements)
 
-    while eval_expr(condition):
-        print(
+    while eval_expr(condition, table):
+        '''print(
             f"Repetition condition is true; executing statements: {statements}"
-            )
-        exec_statements(statements)
+            )'''
+        exec_statements(statements, table)
 
 
-def exec_selection(statement):
+def exec_selection(statement, table):
     """
     SELECTION = '[', "'if'", COMMA, CONDITION, COMMA,
       STATEMENT, [COMMA, STATEMENT], ']'
@@ -155,7 +156,7 @@ def exec_selection(statement):
     else:
         else_statement = None
 
-    if eval_expr(condition):
+    if eval_expr(condition, table):
         print("Selection condition is true; executing then branch.")
         exec_statement(then_statement)
     elif else_statement is not None:
@@ -163,7 +164,7 @@ def exec_selection(statement):
         exec_statement(else_statement)
 
 
-def exec_input(statement):
+def exec_input(statement, table):
     """
     INPUT = '[', "'read'", COMMA, VARIABLE, ']' ;
 
@@ -184,10 +185,13 @@ def exec_input(statement):
                 f"Error: Invalid input '{user_input}'"
                 f"for variable '{variable}'." "Expected a number."
                 )
+
+    variable_table = copy.deepcopy(table)
     variable_table[variable] = value
+    return variable_table
 
 
-def exec_output(statement):
+def exec_output(statement, table):
     """
     Execute an output statement.
 
@@ -195,11 +199,11 @@ def exec_output(statement):
     return: The result of executing the output statement.
     """
     print_expr = c.output_expression(statement)
-    print_expr = variable_table.get(print_expr, print_expr)
-    print(print_expr)
+    print_expr_value = table.get(print_expr, print_expr)
+    print(print_expr, "=", print_expr_value)
 
 
-def eval_expr(expression):
+def eval_expr(expression, table):
     """
     Evaluate a Calc expression.
 
@@ -216,20 +220,20 @@ def eval_expr(expression):
 
     elif c.is_variable(expression):
         print("Variable expression:", expression)
-        return eval_variable(expression)
+        return eval_variable(expression, table)
 
     elif c.is_binaryexpr(expression):
         print("Binary expression:", expression)
-        return eval_binaryexpr(expression)
+        return eval_binaryexpr(expression, table)
     elif c.is_condition(expression):
         print("Condition expression:", expression)
-        return eval_condition(expression)
+        return eval_condition(expression, table)
 
     else:
         raise Exception(f"Error: {expression} is not a valid Calc expression.")
 
 
-def eval_binaryexpr(expression):
+def eval_binaryexpr(expression, table):
     """
     Evaluate a binary expression.
 
@@ -240,8 +244,8 @@ def eval_binaryexpr(expression):
     left_expr = c.binaryexpr_left(expression)
     right_expr = c.binaryexpr_right(expression)
 
-    left_expr = eval_expr(left_expr)
-    right_expr = eval_expr(right_expr)
+    left_expr = eval_expr(left_expr, table)
+    right_expr = eval_expr(right_expr, table)
     if binop == '+':
         print(left_expr + right_expr)
         return left_expr + right_expr
@@ -258,17 +262,17 @@ def eval_binaryexpr(expression):
         raise Exception(f"Error: {binop} is not a valid binary operator")
 
 
-def eval_variable(expression):
+def eval_variable(expression, table):
     """
     Evaluate a variable expression.
 
     param: expression: list, A variable expression.
     return: The result of evaluating the variable expression.
     """
-    return variable_table.get(expression, expression)
+    return table.get(expression, expression)
 
 
-def eval_condition(expression):
+def eval_condition(expression, table):
     """
     Evaluate a condition expression.
 
@@ -279,8 +283,8 @@ def eval_condition(expression):
     left_expr = c.condition_left(expression)
     right_expr = c.condition_right(expression)
 
-    left_expr = eval_expr(left_expr)
-    right_expr = eval_expr(right_expr)
+    left_expr = eval_expr(left_expr, table)
+    right_expr = eval_expr(right_expr, table)
 
     if condop == '=':
         print(left_expr == right_expr)
@@ -300,7 +304,8 @@ if __name__ == "__main__":
     _print_and_set_a_prog = ["calc", ["print", "a"], ["set", "a", 0]]
     _input_a_prog = ["calc", ["read", "a"]]
     _print_a_prog = ["calc", ["print", "a"]]
-    _print_if_prog = ["calc", ["if", ["a", ">", "b"], ["print", "a"], ["print", "a"]]]
+    _print_if_prog = ["calc", ["if", ["a", ">", "b"], ["print", "a"],
+                                     ["print", "a"]]]
     _read_and_print_a_prog = ["calc", ["read", "a"], ["print", "a"]]
     _if_prog = [
         "calc",
@@ -342,6 +347,8 @@ if __name__ == "__main__":
         ],
         ["print", "sum"],
     ]
+    exec_program(_set_a_prog)
+    print("-----")
     exec_program(_loop_with_binexpr_prog)
     print("-----")
     exec_program(_if_set_prog)
@@ -349,7 +356,7 @@ if __name__ == "__main__":
     exec_program(_loop_prog)
     print("-----")
     exec_program(_if_prog)
-    print("-----")  
+    print("-----")
     exec_program(_read_and_print_a_prog)
     print("-----")
     exec_program(_print_if_prog)
@@ -359,5 +366,3 @@ if __name__ == "__main__":
     exec_program(_input_a_prog)
     print("-----")
     exec_program(_print_and_set_a_prog)
-    print("-----")
-    exec_program(_set_a_prog)
