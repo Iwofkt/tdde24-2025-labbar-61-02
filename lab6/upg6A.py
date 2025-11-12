@@ -5,7 +5,7 @@ import copy
 # -- EXECUTION FUNCTIONS -- #
 
 
-def exec_program(const_calc_program: list, table: dict = {}):
+def exec_program(calc_program: list, table: dict = {}):
     """
     PROGRAM = '[', "'calc'", COMMA, STATEMENTS, ']
     Execute a Calc program represented as a constant list structure.
@@ -14,7 +14,10 @@ def exec_program(const_calc_program: list, table: dict = {}):
       list structure.
     return: The result of executing the Calc program.
     """
-    p = const_calc_program
+
+    # Deepcopy to avoid modifying original program and table
+    p = calc_program
+    variable_table = table
 
     if not c.is_program(p):
         raise Exception(f"Error: {p} is not a valid Calc program.")
@@ -23,7 +26,6 @@ def exec_program(const_calc_program: list, table: dict = {}):
     statements = c.program_statements(p)
 
     # Execute the statements
-    variable_table = copy.deepcopy(table)
     variable_table = exec_statements(statements, variable_table)
     return variable_table
 
@@ -98,7 +100,7 @@ def exec_assignment(statement, table: dict):
     expression = c.assignment_expression(statement)
     value = eval_expr(expression, table)
 
-    # o we need this deepcopy?
+    # Deepcopy to avoid modifying original table
     variable_table = copy.deepcopy(table)
     variable_table[variable] = value
     return variable_table
@@ -117,7 +119,7 @@ def exec_repetition(statement, table: dict):
     condition = c.repetition_condition(statement)
     statements = c.repetition_statements(statement)
 
-    # Do we need this deepcopy?
+    # Deepcopy to avoid modifying original table
     current_table = copy.deepcopy(table)
 
     while eval_expr(condition, current_table):
@@ -176,7 +178,7 @@ def exec_input(statement, table: dict):
                 f"for variable '{variable}'." "Expected a number."
             )
 
-    # Do we need this deepcopy?
+    # Deepcopy to avoid modifying original table
     variable_table = copy.deepcopy(table)
     variable_table[variable] = value
     return variable_table
@@ -275,3 +277,57 @@ def eval_condition(expression, table: dict):
         return left_val < right_val
     elif condop == '>':
         return left_val > right_val
+
+
+# -- TESTING CODE -- #
+
+if __name__ == "__main__":
+
+    print("Testing Calc interpreter with working sample programs:")
+
+    factorial = ['calc',
+                 ['read', 'n'],
+                 ['set', 'result', 1],
+                 ['while', ['n', '>', 1],
+                  ['set', 'result', ['result', '*', 'n']],
+                  ['set', 'n', ['n', '-', 1]]
+                  ], ['print', 'result']
+                 ]
+    exec_program(factorial)
+
+    print("------------------------")
+
+    # Fibonacci-sekvens: F(n) = F(n-1) + F(n-2)
+    fibonacci = ['calc',
+                 ['read', 'n'],
+                 ['set', 'a', 0],
+                 ['set', 'b', 1],
+                 ['set', 'i', 1],
+                 ['while', ['i', '<', 'n'],
+                  ['set', 'temp', 'b'],
+                  ['set', 'b', ['a', '+', 'b']],
+                  ['set', 'a', 'temp'],
+                  ['set', 'i', ['i', '+', 1]]
+                  ], ['print', 'b']
+                 ]
+    exec_program(fibonacci)
+
+    print("------------------------")
+
+    # Read n digits and find the smallest one
+    find_min = ['calc',
+                ['set', 'min', float('inf')],
+                ['read', 'n'],
+                ['set', 'count', 0],
+                ['while', ['count', '<', 'n'],
+                 ['read', 'num'],
+                 ['if', ['num', '<', 'min'],
+                  ['set', 'min', 'num']
+                  ], ['set', 'count', ['count', '+', 1]]
+                 ], ['print', 'min']
+                ]
+    exec_program(find_min)
+
+    print("------------------------")
+
+    print("Testing Calc interpreter with defect sample programs:")
