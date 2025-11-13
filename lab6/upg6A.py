@@ -194,8 +194,11 @@ def exec_output(statement, table: dict):
     return: The result of executing the output statement.
     """
     print_expr = c.output_expression(statement)
-    print_expr_value = eval_expr(print_expr, table)
-    print(f"{print_expr} = {print_expr_value}")
+    if isinstance(print_expr, int):
+        print(print_expr)
+    else:
+        print_expr_value = eval_expr(print_expr, table)
+        print(f"{print_expr} = {print_expr_value}")
 
     return table
 
@@ -291,6 +294,11 @@ def eval_condition(expression, table: dict):
 if __name__ == "__main__":
 
     print("Testing Calc interpreter with working sample programs:")
+
+    equal = ['calc',
+             ['if', [5, '=', 5], ['print', 10]]
+             ]
+    exec_program(equal)
 
     factorial = ['calc',
                  ['read', 'n'],
