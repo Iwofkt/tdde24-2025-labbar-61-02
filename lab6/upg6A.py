@@ -17,7 +17,6 @@ def exec_program(calc_program: list, table: dict = {}):
     return: The result of executing the Calc program.
     """
 
-    # Deepcopy to avoid modifying original program and table
     p = calc_program
     variable_table = table
 
@@ -28,8 +27,7 @@ def exec_program(calc_program: list, table: dict = {}):
     statements = c.program_statements(p)
 
     # Execute the statements
-    variable_table = exec_statements(statements, variable_table)
-    return variable_table
+    return exec_statements(statements, variable_table)
 
 
 def exec_statements(statements, table: dict):
@@ -127,12 +125,12 @@ def exec_repetition(statement, table: dict):
     statements = c.repetition_statements(statement)
 
     # Deepcopy to avoid modifying original table
-    current_table = copy.deepcopy(table)
+    variable_table = copy.deepcopy(table)
 
-    while eval_expr(condition, current_table):
-        current_table = exec_statements(statements, current_table)
+    while eval_condition(condition, variable_table):
+        variable_table = exec_statements(statements, variable_table)
 
-    return current_table
+    return variable_table
 
 
 def exec_selection(statement, table: dict):
@@ -154,7 +152,7 @@ def exec_selection(statement, table: dict):
     else:
         else_statement = None
 
-    if eval_expr(condition, table):
+    if eval_condition(condition, table):
         return exec_statement(then_statement, table)
     elif else_statement is not None:
         return exec_statement(else_statement, table)
@@ -200,11 +198,12 @@ def exec_output(statement, table: dict):
     return: The result of executing the output statement.
     """
     print_expr = c.output_expression(statement)
-    print_expr_value = eval_expr(print_expr, table)
 
     if c.is_variable(print_expr):
+        print_expr_value = eval_variable(print_expr, table)
         print(f"{print_expr} = {print_expr_value}")
     else:
+        print_expr_value = eval_expr(print_expr, table)
         print(print_expr_value)
 
     return table
@@ -227,8 +226,6 @@ def eval_expr(expression, table):
         return eval_variable(expression, table)
     elif c.is_binaryexpr(expression):
         return eval_binaryexpr(expression, table)
-    elif c.is_condition(expression):
-        return eval_condition(expression, table)
     else:
         raise Exception(f"{expression} is not a valid expression")
 
@@ -302,11 +299,17 @@ if __name__ == "__main__":
 
     print("Testing Calc interpreter with working sample programs:")
 
+    print("------------------------")
+
+    print("Testing selection functionality")
     equal = ['calc',
              ['if', [5, '=', 5], ['print', 10]]
              ]
     exec_program(equal)
 
+    print("------------------------")
+
+    print("Testing print functionality with conditions")
     equal_print = ['calc', ['print', [5, '=', 5]]]
     exec_program(equal_print)
 
@@ -322,6 +325,7 @@ if __name__ == "__main__":
 
     print("------------------------")
 
+    print("Given example to test fibonacci sequence.")
     # Fibonacci-sekvens: F(n) = F(n-1) + F(n-2)
     fibonacci = ['calc',
                  ['read', 'n'],
@@ -339,6 +343,7 @@ if __name__ == "__main__":
 
     print("------------------------")
 
+    print("Given example to find minimum value")
     # Read n digits and find the smallest one
     find_min = ['calc',
                 ['set', 'min', float('inf')],
@@ -357,6 +362,7 @@ if __name__ == "__main__":
 
     print("Testing Calc interpreter with defect sample programs:")
 
+    print("Catching that variables can't be asigned strings")
     # Test asigning variable a string value
     print_text = ['calc',
                   ['set', 'text', "'Hello'"],
@@ -366,18 +372,26 @@ if __name__ == "__main__":
         exec_program(print_text)
 
     except Exception as e:
-        print(e)
+        print("Got given error", e, "which is good!")
 
-    # Test a program without calc in the begining
+    print("------------------------")
+
+    print("Catching that calc programs not starting with calc is being caught")
+
+    # Test a program without calc in the beginning
     no_clac = [
-                  ['set', 'text', "'Hello'"],
+                  ['set', 'text', 5],
                   ['print', 'text']
                   ]
     try:
         exec_program(no_clac)
 
     except Exception as e:
-        print(e)
+        print("Got given error", e, "which is good!")
+
+    print("------------------------")
+
+    print("Program with invalid binary operand")
 
     # Test a program with invalid binary operand
     modulo = ['calc',
@@ -388,7 +402,11 @@ if __name__ == "__main__":
         exec_program(modulo)
 
     except Exception as e:
-        print(e)
+        print("Got given error", e, "which is good!")
+
+    print("------------------------")
+
+    print("Program with invalid condition operand")
 
     # Test a program with invalid condition operand
     big_or_equal = ['calc',
@@ -399,6 +417,9 @@ if __name__ == "__main__":
         exec_program(big_or_equal)
 
     except Exception as e:
-        print(e)
+        print("Got given error", e, "which is good!")
+
+    print("------------------------")
+
 
 print("Passed all tests.")
