@@ -8,7 +8,8 @@ import copy
 def exec_program(calc_program: list, table: dict = {}):
     """
     PROGRAM = '[', "'calc'", COMMA, STATEMENTS, ']
-    Execute a Calc program represented as a constant list structure.
+
+    Execute a Calc program represented as a python list structure.
 
     param: calc_program: list, A Calc program in the form of a
       list structure.
@@ -37,11 +38,12 @@ def exec_statements(statements, table: dict):
         STATEMENT
       | STATEMENT, COMMA, STATEMENTS
 
-    Execute a list of Calc statements.
+    Send statements one by one to be executed in statement function.
 
     param: statements: list, A list of Calc statements.
     param: table: dict, The current variable table.
-    return: The result variable tables of executing the list of statements.
+    return: The result variable table after the wole program has been
+    executed.
     """
     if c.empty_statements(statements):
         return table  # Return current table (Base case)
@@ -66,7 +68,9 @@ def exec_statement(statement, table: dict):
       | SELECTION
       | INPUT
       | OUTPUT
-    Execute a single Calc statement.
+
+    Execute a Calc statement by checking its structure and sending
+    it to different execution functions.
 
     param: statement: list, A single Calc statement.
     param: table: dict, The current variable table.
@@ -91,7 +95,8 @@ def exec_assignment(statement, table: dict):
     """
     ASSIGNMENT = '[', "'set'", COMMA, VARIABLE, COMMA, EXPRESSION, ']'
 
-    Execute an assignment statement.
+    Execute an assignment statement by asigning a variable in the variable
+    to an evaluated expression.
 
     param: statement: list, An assignment statement.
     param: table: dict, The current variable table.
@@ -111,7 +116,8 @@ def exec_repetition(statement, table: dict):
     """
     REPETITION = '[', "'while'", COMMA, CONDITION, COMMA, STATEMENTS, ']'
 
-    Execute a repetition statement.
+    Execute a repetition statement by looping a satatement until a condition
+    is met.
 
     param: statement: list, A repetition statement.
     param: table: dict, The current variable table.
