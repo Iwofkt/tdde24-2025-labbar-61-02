@@ -200,11 +200,12 @@ def exec_output(statement, table: dict):
     return: The result of executing the output statement.
     """
     print_expr = c.output_expression(statement)
-    if isinstance(print_expr, int):
-        print(print_expr)
-    else:
-        print_expr_value = eval_expr(print_expr, table)
+    print_expr_value = eval_expr(print_expr, table)
+
+    if c.is_variable(print_expr):
         print(f"{print_expr} = {print_expr_value}")
+    else:
+        print(print_expr_value)
 
     return table
 
@@ -305,6 +306,9 @@ if __name__ == "__main__":
              ['if', [5, '=', 5], ['print', 10]]
              ]
     exec_program(equal)
+
+    equal_print = ['calc', ['print', [5, '=', 5]]]
+    exec_program(equal_print)
 
     factorial = ['calc',
                  ['read', 'n'],
