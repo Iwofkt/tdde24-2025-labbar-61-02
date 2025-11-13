@@ -10,8 +10,9 @@ def exec_program(calc_program: list, table: dict = {}):
     PROGRAM = '[', "'calc'", COMMA, STATEMENTS, ']
     Execute a Calc program represented as a constant list structure.
 
-    param: const_calc_program: list, A Calc program in the form of a
+    param: calc_program: list, A Calc program in the form of a
       list structure.
+    param: table: dict, A variable table used in the calc program.
     return: The result of executing the Calc program.
     """
 
@@ -207,6 +208,7 @@ def eval_expr(expression, table):
     Evaluate a Calc expression.
 
     param: expression: list/int/float, A Calc expression.
+    param: table: dict, The current variable table.
     return: The result of evaluating the expression.
     """
     if c.is_constant(expression):
@@ -217,6 +219,8 @@ def eval_expr(expression, table):
         return eval_binaryexpr(expression, table)
     elif c.is_condition(expression):
         return eval_condition(expression, table)
+    else:
+        raise Exception(f"{expression} is not a valid expression")
 
 
 def eval_binaryexpr(expression, table: dict):
@@ -224,6 +228,7 @@ def eval_binaryexpr(expression, table: dict):
     Evaluate a binary expression.
 
     param: expression: list, A binary expression.
+    param: table: dict, The current variable table.
     return: The result of evaluating the binary expression.
     """
     binop = c.binaryexpr_operator(expression)
@@ -248,6 +253,7 @@ def eval_variable(expression, table):
     Evaluate a variable expression.
 
     param: expression: list, A variable expression.
+    param: table: dict, The current variable table.
     return: The result of evaluating the variable expression.
     """
     # If variable exists in table, return its value, otherwise raise error
@@ -262,6 +268,7 @@ def eval_condition(expression, table: dict):
     Evaluate a condition expression.
 
     param: expression: list, A condition expression.
+    param: table: list,
     return: The result of evaluating the condition expression.
     """
     condop = c.condition_operator(expression)
@@ -331,3 +338,49 @@ if __name__ == "__main__":
     print("------------------------")
 
     print("Testing Calc interpreter with defect sample programs:")
+
+    # Test asigning variable a string value
+    print_text = ['calc',
+                  ['set', 'text', "'Hello'"],
+                  ['print', 'text']
+                  ]
+    try:
+        exec_program(print_text)
+
+    except Exception as e:
+        print(e)
+
+    # Test a program without calc in the begining
+    no_clac = [
+                  ['set', 'text', "'Hello'"],
+                  ['print', 'text']
+                  ]
+    try:
+        exec_program(no_clac)
+
+    except Exception as e:
+        print(e)
+
+    # Test a program with invalid binary operand
+    modulo = ['calc',
+              ['set', 'variable', [5, '<=', 2]],
+              ['print', 'variable']
+              ]
+    try:
+        exec_program(modulo)
+
+    except Exception as e:
+        print(e)
+
+    # Test a program with invalid condition operand
+    big_or_equal = ['calc',
+                    ['if', [5, '>=', 2]],
+                    ['print', 10]
+                    ]
+    try:
+        exec_program(big_or_equal)
+
+    except Exception as e:
+        print(e)
+
+print("Passed all tests.")
