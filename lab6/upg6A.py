@@ -144,18 +144,10 @@ def exec_selection(statement, table: dict):
     param: table: dict, The current variable table.
     return: The result of executing the selection statement.
     """
-    condition = c.selection_condition(statement)
-    then_statement = c.selection_true_branch(statement)
-
-    if c.selection_has_false_branch(statement):
-        else_statement = c.selection_false_branch(statement)
-    else:
-        else_statement = None
-
-    if eval_condition(condition, table):
-        return exec_statement(then_statement, table)
-    elif else_statement is not None:
-        return exec_statement(else_statement, table)
+    if eval_condition(c.selection_condition(statement), table):
+        return exec_statement(c.selection_true_branch(statement), table)
+    elif c.selection_has_false_branch(statement):
+        return exec_statement(c.selection_false_branch(statement), table)
     else:
         return table
 
