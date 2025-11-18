@@ -218,6 +218,8 @@ def eval_expr(expression, table):
         return eval_variable(expression, table)
     elif c.is_binaryexpr(expression):
         return eval_binaryexpr(expression, table)
+    elif c.is_condition(expression):
+        return eval_condition(expression, table)
     else:
         raise Exception(f"{expression} is not a valid expression")
 
