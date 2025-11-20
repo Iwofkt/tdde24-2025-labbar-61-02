@@ -44,7 +44,7 @@ def exec_statements(statements, table: dict):
     executed.
     """
     if c.empty_statements(statements):
-        return table  # Return current table (Base case)
+        return table
 
     first_statement = c.first_statement(statements)
     rest_statements = c.rest_statements(statements)

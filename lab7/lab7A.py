@@ -37,9 +37,32 @@ def match(seq: list, pattern: list):
         print("matching:\n", seq[1:], "\n", pattern[1:])
         return match(seq[1:], pattern[1:])
 
-    else:
-        return False
+    return False
+
+def search(seq, pattern):
+    """
+    Returns whether given sequence exists in the given pattern
+    """
+    if not seq:
+        return match(seq, pattern)
+
+    if match(seq, pattern):
+        return True
+
+    if isinstance(seq[0], list):
+        if not isinstance(pattern[0], list):
+            if search(seq[0], pattern):
+                return True
+        elif isinstance(pattern[0], list):
+            if search(seq[0], pattern[0]):
+                return True
+
+    return search(seq[1:], pattern)
+
 
 
 if __name__ == "__main__":
     print(match(db, pattern))
+    print("----------")
+    print(search(db, [['År', 2011]])
+)
