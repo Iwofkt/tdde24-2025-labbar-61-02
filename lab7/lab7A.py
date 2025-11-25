@@ -39,6 +39,7 @@ def match(seq: list, pattern: list):
 
     return False
 
+
 def search(seq, pattern):
     """
     Returns whether given sequence exists in the given pattern
@@ -60,9 +61,8 @@ def search(seq, pattern):
     return search(seq[1:], pattern)
 
 
-
 if __name__ == "__main__":
-    print(match(db, pattern))
+    # print(match(db, pattern))
     print("----------")
     print(search(db, [['År', 2011]])
-)
+          )
