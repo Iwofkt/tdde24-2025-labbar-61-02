@@ -36,64 +36,45 @@ def contains_key(tree, wanted_key):
     return traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
 
 
-def tree_size(tree: list):
-    size = 0
-
+def tree_size(tree):
     def empty_tree_fn():
-        return None
+        return 0
 
     def leaf_fn(key):
-        nonlocal size
-        if key:
-            size += 1
+        return 1
 
     def inner_node_fn(key, left_value, right_value):
-        nonlocal size
-        size += 1
+        return 1 + left_value + right_value
 
-    # Treverse the tree to update the size value
-    traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
-
-    return size
+    return traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
 
 
-def traverse(tree: list,
-             inner_node_fn,
-             leaf_fn,
-             empty_tree_fn) -> int:
+def traverse(tree,
+                   inner_node_fn,
+                   leaf_fn,
+                   empty_tree_fn):
+    if isinstance(tree, list):
+        if not tree:  # Empty tree
+            return empty_tree_fn()
 
-    def left_subtree(tree: list):
-        return tree[0]
+        # Helper functions for accessing tree parts
+        def left_subtree(t):
+            return t[0]
 
-    def middle_subtree(tree: list):
-        return tree[1]
+        def key(t):
+            return t[1]
 
-    def right_subtree(tree: list):
-        return tree[2]
+        def right_subtree(t):
+            return t[2]
 
-    def subtree_calc(subtree):
-        calced_tree = subtree(tree)
-        if isinstance(calced_tree, list):
-            value = leaf_fn(traverse(calced_tree,
-                                     inner_node_fn,
-                                     leaf_fn,
-                                     empty_tree_fn))
-        else:
-            value = leaf_fn(calced_tree)
+        # Recursively process left and right subtrees
+        left_value = traverse(left_subtree(tree), inner_node_fn, leaf_fn, empty_tree_fn)
+        right_value = traverse(right_subtree(tree), inner_node_fn, leaf_fn, empty_tree_fn)
 
-        return value
-
-    if not tree:
-        return empty_tree_fn()
-
-    left_value = subtree_calc(left_subtree)
-    right_value = subtree_calc(right_subtree)
-
-    return inner_node_fn(
-        middle_subtree(tree),
-        left_value,
-        right_value
-    )
+        return inner_node_fn(key(tree), left_value, right_value)
+    else:
+        # Leaf node
+        return leaf_fn(tree)
 
 
 if __name__ == "__main__":
