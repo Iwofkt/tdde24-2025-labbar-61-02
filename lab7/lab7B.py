@@ -37,18 +37,24 @@ def contains_key(tree, wanted_key):
 
 
 def tree_size(tree: list):
+    size = 0
+
     def empty_tree_fn():
-        return 0
+        return None
 
     def leaf_fn(key):
-        if empty_tree_fn():
-            return empty_tree_fn()
-        return 1
+        nonlocal size
+        if key:
+            size += 1
 
     def inner_node_fn(key, left_value, right_value):
-        return 1 + left_value + right_value
+        nonlocal size
+        size += 1
 
-    return traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
+    # Treverse the tree to update the size value
+    traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
+
+    return size
 
 
 def traverse(tree: list,
@@ -66,13 +72,14 @@ def traverse(tree: list,
         return tree[2]
 
     def subtree_calc(subtree):
-        if isinstance(subtree(tree), list):
-            value = leaf_fn(traverse(subtree(tree),
+        calced_tree = subtree(tree)
+        if isinstance(calced_tree, list):
+            value = leaf_fn(traverse(calced_tree,
                                      inner_node_fn,
                                      leaf_fn,
                                      empty_tree_fn))
         else:
-            value = leaf_fn(subtree(tree))
+            value = leaf_fn(calced_tree)
 
         return value
 
