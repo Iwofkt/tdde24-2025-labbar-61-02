@@ -49,6 +49,19 @@ def tree_size(tree):
     return traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
 
 
+def tree_depth(tree):
+    def empty_tree_fn():
+        return 0
+
+    def leaf_fn(key):
+        return 1
+
+    def inner_node_fn(key, left_value, right_value):
+        return 1 + max(left_value, right_value)
+
+    return traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
+
+
 def traverse(tree,
                    inner_node_fn,
                    leaf_fn,
