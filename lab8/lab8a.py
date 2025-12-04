@@ -11,7 +11,7 @@ def ts_equals(ts1: TimeSpan, ts2: TimeSpan):
 
 
 def ts_overlap(ts1: TimeSpan, ts2: TimeSpan) -> bool:
-    """Return true iff the two given TimeSpans overlap."""
+    """Return true if the two given TimeSpans overlap."""
     ensure_type(ts1, TimeSpan)
     ensure_type(ts2, TimeSpan)
 
