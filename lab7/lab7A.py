@@ -28,7 +28,7 @@ def match(seq: list, pattern: list):
         return False
 
     elif pattern[0] == '&':
-        #substitute the first element in sequence with & in pattern
+        # substitute the first element in sequence with & in pattern
         return match(seq[1:], pattern[1:])
 
     elif isinstance(seq[0], list) and isinstance(pattern[0], list):
