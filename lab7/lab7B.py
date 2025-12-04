@@ -114,11 +114,3 @@ def traverse(tree,
     else:
         # Leaf node
         return leaf_fn(tree)
-
-
-if __name__ == "__main__":
-    print(traverse([[1,5,4], 7, [1,7,6]], left_inner_node_fn, leaf_fn, empty_tree_fn))
-    print(contains_key([[1,5,4], 7, [1,8,[1,5,9]]], 10))
-    print(tree_size([2, 7, []]))
-    print(tree_size([]))
-    print(tree_size([[1, 2, []], 4, [[], 5, 6]]))

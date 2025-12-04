@@ -67,19 +67,3 @@ def search(pattern: list, seq: list):
     results.extend(rest_results)
 
     return results
-
-
-if __name__ == "__main__":
-    print(match(db, pattern))
-
-    print("\n----------\n ")
-
-    # Test cases
-    result1 = search([['författare', ['&', 'zelle']], ['titel', ['--', 'python', '--']], ['år', '&']], db)
-    print("Result 1:", result1)
-
-    result2 = search(['--', ['år', 2042], '--'], db)
-    print("Result 2:", result2)
-
-    result3 = search(['--', ['titel', ['&', '&']], '--'], db)
-    print("Result 3:", result3)
