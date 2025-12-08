@@ -1,6 +1,5 @@
 # This code violates abstraction layers, and should be reimplemented in lab 8A.
 from cal_abstraction import *
-from cal_abstraction import TimeSpan
 
 timespan = TimeSpan()
 

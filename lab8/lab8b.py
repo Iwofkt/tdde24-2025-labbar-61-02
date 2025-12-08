@@ -1,9 +1,12 @@
+from cal_abstraction import *
+from typing import NamedTuple
+
 # =========================================================================
 # Type definition
 # =========================================================================
 
 # Define the type somehow...  The initial "" is simply here as a placeholder.
-TimeSpanSeq = ""
+TimeSpanSeq = NamedTuple("TimeSpanSeq", [("time_span_list", list[TimeSpan])])
 
 # =========================================================================
 #  Function implementations
@@ -11,24 +14,44 @@ TimeSpanSeq = ""
 
 # Implement these functions!  Also determine if you need *additional* functions.
 
-def new_time_span_seq():
-    pass
+def new_time_span_seq(span_list = None) -> TimeSpanSeq:
+    """
+    Create and return a new times span sequence
+    """
+    return TimeSpanSeq(time_span_list=span_list)
+
+def tss_is_empty(tss: TimeSpanSeq):
+    """
+    Check if time span sequence is empty
+    """
+    if tss_iter_spans(tss):
+        return False
+    return True
 
 
-def tss_is_empty(tss):
-    pass
-
-
-def tss_plus_span(tss, ts):
-    pass
+def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan):
+    """
+    Add a time span to a time span sequence
+    """
+    for index, time_span in enumerate(tss_iter_spans(tss)):
+       if time_precedes_or_equals(ts_start(time_span), ts_start(ts)):
+            tss_iter_spans(tss).insert(index + 1, ts)
 
 
 def tss_iter_spans(tss):
-    pass
+    """
+    Return the time span list in a sequence
+    """
+
+    return tss.time_span_list
 
 
 def show_time_spans(tss):
-    pass
+    """
+    print a time span sequence
+    """
+    for time_span in tss_iter_spans(tss):
+        print(time_span)
 
 
 # Keep only time spans that satisfy pred.
