@@ -42,8 +42,9 @@ def tss_iter_spans(tss):
     """
     Return the time span list in a sequence
     """
-
-    return tss.time_span_list
+    ensure_type(tss, TimeSpanSeq)
+    for time_span in tss.time_span_list:
+        yield time_span
 
 
 def show_time_spans(tss):
