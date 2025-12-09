@@ -1,5 +1,5 @@
 import unittest
-from lab7B import (
+from lab7.lab7B import (
     empty_tree_fn,
     leaf_fn,
     left_inner_node_fn,
