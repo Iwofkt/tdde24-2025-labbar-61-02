@@ -1,6 +1,6 @@
 def match(seq: list, pattern: list):
     """
-    Returns whether given sequence matches the given pattern
+    Returns whether a sequence matches the pattern
     """
     # Base case
     if not pattern:
@@ -37,20 +37,26 @@ def match(seq: list, pattern: list):
 
     return False
 
+
 def search(pattern:list, seq: list):
     """
-    Returns all sequences that match the given pattern
+    Returns a list of all elements in a sequence that match the pattern
     """
+
+    # Find all elements in sequence that match the pattern
     result = []
-    for element in pattern:
-        if element == seq:
-            result.append(seq)
+    for element in seq:
+        if match(element, pattern):
+            result.append(element)
 
     return result
 
+
+# -- EXTRA -- #
+
 def deep_search(pattern: list, seq: list):
     """
-    Returns all subsequences that match the given pattern
+        Returns a list of all subsequences in a sequence that match the pattern
     """
     results = []
 

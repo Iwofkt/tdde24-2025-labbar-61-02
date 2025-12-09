@@ -2,7 +2,7 @@ import unittest
 from lab7.lab7A import match, search
 from lab7.books import db
 
-class TestMathFunctions(unittest.TestCase):
+class Testlab7AFunctions(unittest.TestCase):
 
     def setUp(self):
         """
@@ -97,59 +97,107 @@ class TestMathFunctions(unittest.TestCase):
         seq = ['before', ['titel', ['rocks', 'perfection']], 'after']
         self.assertFalse(match(seq, pattern))
 
-
-    def test_search(self):
+    def test_search_basics(self):
         """
-        test all search functionality, valid and unvalid
+        Basic tests for our search function
         """
 
         # -- VALID TESTS -- #
 
-        # Search with wildcards
-        pattern = ['--', ['titel', ['&', '&']], '--']
-        result = search(pattern, db)
-        self.assertEqual(result,
-                         [[['författare', ['armen', 'asratian']], ['titel', ['diskret', 'matematik']], ['År', 2012]],
-                          [['titel', ['diskret', 'matematik']], ['År', 2012]]])
+        # Test exact match in simple list
+        pattern = ['författare', ['john', 'zelle']]
+        seq = [
+            ['författare', ['john', 'zelle']],
+            ['titel', ['python', 'programming']],
+            ['författare', ['armen', 'asratian']]
+        ]
+        result = search(pattern, seq)
+        expected = [['författare', ['john', 'zelle']]]
+        self.assertEqual(result, expected)
 
+        # Test multiple matches
+        pattern = ['År', 2010]
+        seq = [
+            ['År', 2010],
+            ['titel', ['python']],
+            ['År', 2010],
+            ['År', 2011]
+        ]
+        result = search(pattern, seq)
+        expected = [['År', 2010], ['År', 2010]]
+        self.assertEqual(result, expected)
 
-        # Search with substitution for a single value (&)
-        pattern = ['&', ['diskret', 'matematik']]
-        result = search(pattern, db)
-        self.assertEqual(result,
-                         [['titel', ['diskret', 'matematik']]])
+        # Test search returns empty list for no matches
+        pattern = ['författare', ['unknown', 'author']]
+        seq = [
+            ['författare', ['john', 'zelle']],
+            ['titel', ['python']]
+        ]
+        result = search(pattern, seq)
+        self.assertEqual(result, [])
 
-        # Search with substitution for a list
-        pattern = [['författare', ['armen', 'asratian']],
-       ['titel', ['diskret', 'matematik']], '&'
-       ]
-        result = search(pattern, db)
-        self.assertEqual(result,
-                         [[['författare', ['armen', 'asratian']],
-                          ['titel', ['diskret', 'matematik']],
-                          ['År', 2012]]])
+        # Test search with empty sequence
+        pattern = ['författare', ['john', 'zelle']]
+        seq = []
+        result = search(pattern, seq)
+        self.assertEqual(result, [])
+
+    def test_search_wildcards(self):
+        """
+        Tests for search function with wildcards
+        """
+
+        # -- VALID TESTS -- #
+
+        # Test search with '&' wildcard
+        pattern = ['År', '&']
+        seq = [
+            ['År', 2010],
+            ['titel', ['python']],
+            ['År', 2011],
+            ['År', 'unknown']
+        ]
+        result = search(pattern, seq)
+        expected = [['År', 2010], ['År', 2011], ['År', 'unknown']]
+        self.assertEqual(result, expected)
+
+        # Test search with '--' wildcard in list
+        pattern = ['titel', ['--', 'python', '--']]
+        seq = [
+            ['titel', ['learning', 'python', 'the', 'hard', 'way']],
+            ['titel', ['python', 'rocks']],
+            ['titel', ['java', 'programming']],
+            ['titel', ['advanced', 'python', 'techniques']]
+        ]
+        result = search(pattern, seq)
+        expected = [
+            ['titel', ['learning', 'python', 'the', 'hard', 'way']],
+            ['titel', ['python', 'rocks']],
+            ['titel', ['advanced', 'python', 'techniques']]
+        ]
+        self.assertEqual(result, expected)
+
+        # Test search with nested wildcards
+        pattern = ['titel', ['&', '&'], '--']
+        seq = [
+            ['författare', ['john', 'zelle']],
+            ['titel', ['python', 'rocks']],
+            ['År', 2010]
+        ]
+        expected = [['titel', ['python', 'rocks']]]
+        result = search(pattern, seq)
+        self.assertEqual(result, expected)  # Should match the entire sequence
 
         # -- INVALID TESTS -- #
 
-        # Test pattern not matching anything (no match)
-        pattern = ['--', ['titel', ['&', 'nonexistent']], '--']
-        result = search(pattern, db)
-        self.assertEqual(result, [])
-
-        # Test pattern with mismatched year
-        pattern = ['--', ['År', 2023], '--']
-        result = search(pattern, db)
-        self.assertEqual(result, [])
-
-        # Test matching but with extra, non-matching elements
-        pattern = ['--', ['titel', ['data', 'structures']], '--']
-        result = search(pattern, db)
-        self.assertEqual(result, [])
-
-        # Test a case where & should not match a list with multiple elements
-        pattern = ['--', ['titel', ['&']], '--']
-        seq = ['before', ['titel', ['rocks', 'perfection']], 'after']
-        self.assertFalse(match(seq, pattern))
-
+        # Test that '&' doesn't match empty
+        pattern = ['titel', ['&', '&']]
+        seq = [
+            ['titel', ['python']],  # Only one element
+            ['titel', ['python', 'rocks']]  # Two elements
+        ]
+        result = search(pattern, seq)
+        expected = [['titel', ['python', 'rocks']]]
+        self.assertEqual(result, expected)
 if __name__ == '__main__':
     unittest.main()
