@@ -14,11 +14,13 @@ TimeSpanSeq = NamedTuple("TimeSpanSeq", [("time_span_list", list[TimeSpan])])
 
 # Implement these functions!  Also determine if you need *additional* functions.
 
-def new_time_span_seq(span_list = None) -> TimeSpanSeq:
+
+def new_time_span_seq(span_list=None) -> TimeSpanSeq:
     """
     Create and return a new times span sequence
     """
     return TimeSpanSeq(time_span_list=span_list)
+
 
 def tss_is_empty(tss: TimeSpanSeq):
     """
@@ -34,7 +36,7 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan):
     Add a time span to a time span sequence
     """
     for index, time_span in enumerate(tss_iter_spans(tss)):
-       if time_precedes_or_equals(ts_start(time_span), ts_start(ts)):
+        if time_precedes_or_equals(ts_start(time_span), ts_start(ts)):
             tss_iter_spans(tss).insert(index + 1, ts)
 
 
