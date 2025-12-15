@@ -19,6 +19,8 @@ def new_time_span_seq(span_list=None) -> TimeSpanSeq:
     """
     Create and return a new times span sequence
     """
+    if span_list is None:
+        return TimeSpanSeq(time_span_list=[])
     return TimeSpanSeq(time_span_list=span_list)
 
 
@@ -38,6 +40,8 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan):
     for index, time_span in enumerate(tss_iter_spans(tss)):
         if time_precedes_or_equals(ts_start(time_span), ts_start(ts)):
             tss_iter_spans(tss).insert(index + 1, ts)
+    
+    return tss
 
 
 def tss_iter_spans(tss):

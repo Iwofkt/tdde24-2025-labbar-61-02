@@ -20,8 +20,6 @@ else:
 
 
 def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
-    start: Time = new_time_from_string(start)
-    end: Time = new_time_from_string(end)
     tss = new_time_span_seq([])
 
     if time_precedes(end, start):
@@ -34,7 +32,7 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
         tss_plus_span(tss, start, end)
         return tss
 
-    preaend = None
+    preaend = start
 
     for index, app in enumerate(cd_iter_appointments(cal_day)):
         astart: Time = ts_start(app_span(app))

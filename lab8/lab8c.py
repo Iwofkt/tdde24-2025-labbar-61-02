@@ -51,4 +51,3 @@ def minus_appointment(cal_name: str, d: int, m: str, t1: str):
     new_cal_year = cy_plus_cm(cal_year, new_cal_month)
 
     return new_cal_year
-
