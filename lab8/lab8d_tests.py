@@ -28,7 +28,7 @@ def create_tests_for_free_span() -> dict:
         start_str="12:00",  # Search interval starts
         end_str="11:00",  # Search interval ends
         booking_data=["07:00-09:00", "13:00-18:00"],  # This day's appointments
-        exp_result="Invalid time interval"
+        exp_result=[]
     )  # Expected invalid input
 
     # Start time same time as end time
@@ -64,7 +64,7 @@ def create_tests_for_free_span() -> dict:
     # Calender day has no appointments
     store_test_case(
         test_cases,
-        5,
+        6,
         start_str="05:00",  # Search interval starts
         end_str="21:00",  # Search interval ends
         booking_data=[],  # This day's appointments

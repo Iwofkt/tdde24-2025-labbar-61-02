@@ -28,18 +28,20 @@ def tss_is_empty(tss: TimeSpanSeq):
     """
     Check if time span sequence is empty
     """
-    if tss_iter_spans(tss):
-        return False
-    return True
+    return not tss.time_span_list
 
 
 def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan):
     """
     Add a time span to a time span sequence
     """
-    for index, time_span in enumerate(tss_iter_spans(tss)):
+    if tss_is_empty(tss):
+        tss.time_span_list.append(ts)
+        return tss
+    
+    for index, time_span in enumerate(list(tss_iter_spans(tss))):
         if time_precedes_or_equals(ts_start(time_span), ts_start(ts)):
-            tss_iter_spans(tss).insert(index + 1, ts)
+            tss.time_span_list.insert(index + 1, ts)
     
     return tss
 
