@@ -1,8 +1,8 @@
 # Write your code for lab 8d here.
 from cal_abstraction import CalendarDay, Time
 from settings import CHECK_AGAINST_FACIT
+from cal_ui import get_calendar, create, book
 
-#Remove this later
 from lab8b import *
 
 if CHECK_AGAINST_FACIT:
@@ -20,24 +20,26 @@ else:
 
 
 def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
+    """
+    Check for free times between start and end in a calendar day.
+    """
+    ensure_type(cal_day, CalendarDay)
+    ensure_type(end, Time)
+    ensure_type(start, Time)
+
     free_span_start = start
     tss = new_time_span_seq([])
 
-    # -- BASE CASES --
-
-    if time_precedes(end, start):
+    # Start and end is at same time so return the timespan sequence
+    if time_precedes_or_equals(end, start):
         return tss
 
-    if time_equals(start, end):
-        return tss
-
+    # If the day is empty just return the timespan sequence
     if cd_is_empty(cal_day):
         tss = tss_plus_span(tss, new_time_span(start, end))
         return tss
 
     for app in cd_iter_appointments(cal_day):
-        astart: Time = ts_start(app_span(app))
-        aend: Time = ts_end(app_span(app))
         check_span = new_time_span(free_span_start, end)
 
         if not ts_overlap(check_span, app_span(app)):
@@ -47,51 +49,33 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
 
         if time_precedes(free_span_start, ts_start(overlap)):
             tss = tss_plus_span(tss, new_time_span(free_span_start, ts_start(overlap)))
-        
+
         free_span_start = ts_end(app_span(app))
 
     if time_precedes(free_span_start, end):
         tss = tss_plus_span(tss, new_time_span(free_span_start, end))
-    
+
     return tss
-    '''
-        if index == 0:
-            if time_precedes_or_equals(end, astart):
-                tss_plus_span(tss, new_time_span(start, end))
 
-            elif (time_precedes(start, astart)
-                  and time_precedes_or_equals(astart, end)):
-                tss_plus_span(tss, new_time_span(start, astart))
 
-        elif index == len(cd_iter_appointments(cal_day) - 1):
-            if time_precedes_or_equals(aend, start):
-                tss_plus_span(tss, new_time_span(start, end))
+def show_free(cal_name: str, d: int, m: str, t1: str, t2: str):
+    """
+    A ui function to show all free times within a given time during a day
+    """
 
-            elif (time_precedes(aend, end)
-                  and time_precedes_or_equals(start, aend)):
-                tss_plus_span(tss, new_time_span(aend, end))
+    ensure_type(cal_name, str)
+    ensure_type(d, int)
+    ensure_type(m, str)
+    ensure_type(t1, str)
+    ensure_type(t2, str)
 
-        else:
-            if time_precedes(preaend, astart):
-                if (time_precedes_or_equals(preaend, start)
-                   and time_precedes_or_equals(end, astart)):
-                    tss_plus_span(tss, new_time_span(start, end))
+    day = new_day(d)
+    mon = new_month(m)
+    start = new_time_from_string(t1)
+    end = new_time_from_string(t2)
+    cal_year = get_calendar(cal_name)
+    cal_month = cy_get_month(mon, cal_year)
+    cal_day = cm_get_day(cal_month, day)
 
-                elif (time_precedes_or_equals(start, preaend)
-                      and time_precedes_or_equals(end, astart)):
-                    if time_precedes(preaend, end):
-                        tss_plus_span(tss, new_time_span(preaend, end))
-
-                elif (time_precedes_or_equals(preaend, start)
-                      and time_precedes_or_equals(astart, end)):
-                    if time_precedes(start, astart):
-                        tss_plus_span(tss, new_time_span(start, astart))
-
-                elif (time_precedes_or_equals(start, preaend)
-                      and time_precedes_or_equals(astart, end)):
-                    if time_precedes(preaend, astart):
-                        tss_plus_span(tss, new_time_span(preaend, astart))
-
-        preaend = aend
-
-    return tss'''
+    free_time = free_spans(cal_day, start, end)
+    show_time_spans(free_time)

@@ -1,5 +1,5 @@
-from lab8 import lab8c as c
-from lab8 import cal_ui as ui
+import lab8c as c
+import cal_ui as ui
 
 ui.create("Jayne")
 ui.book("Jayne", 20, "sep", "12:00", "14:00", "Rob train")
