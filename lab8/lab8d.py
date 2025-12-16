@@ -32,7 +32,7 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
         return tss
 
     if cd_is_empty(cal_day):
-        tss_plus_span(tss, new_time_span(start, end))
+        tss = tss_plus_span(tss, new_time_span(start, end))
         return tss
 
     for app in cd_iter_appointments(cal_day):
@@ -46,12 +46,12 @@ def free_spans(cal_day: CalendarDay, start: Time, end: Time) -> TimeSpanSeq:
         overlap = ts_overlapping_part(check_span, app_span(app))
 
         if time_precedes(free_span_start, ts_start(overlap)):
-            tss_plus_span(tss, new_time_span(free_span_start, ts_start(overlap)))
+            tss = tss_plus_span(tss, new_time_span(free_span_start, ts_start(overlap)))
         
         free_span_start = ts_end(app_span(app))
 
     if time_precedes(free_span_start, end):
-        tss_plus_span(tss, new_time_span(free_span_start, end))
+        tss = tss_plus_span(tss, new_time_span(free_span_start, end))
     
     return tss
     '''

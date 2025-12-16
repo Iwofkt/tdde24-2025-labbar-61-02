@@ -35,15 +35,20 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan):
     """
     Add a time span to a time span sequence
     """
-    if tss_is_empty(tss):
-        tss.time_span_list.append(ts)
-        return tss
-    
-    for index, time_span in enumerate(list(tss_iter_spans(tss))):
-        if time_precedes_or_equals(ts_start(time_span), ts_start(ts)):
-            tss.time_span_list.insert(index + 1, ts)
-    
-    return tss
+    ensure_type(tss, TimeSpanSeq)
+    ensure_type(ts, TimeSpan)
+
+    def add_timespan(add_ts: TimeSpan, timespan_list: List[TimeSpan]):
+        if not timespan_list or time_precedes(
+                ts_start(add_ts), ts_start(timespan_list[0])
+        ):
+            return [add_ts] + timespan_list
+        else:
+            return [timespan_list[0]] + add_timespan(add_ts, timespan_list[1:])
+
+    return new_time_span_seq(
+        add_timespan(ts, tss.time_span_list)
+    )
 
 
 def tss_iter_spans(tss):
