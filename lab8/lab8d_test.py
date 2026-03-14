@@ -2,8 +2,8 @@
 
 from test_driver import store_test_case, run_free_spans_tests
 
-
 # Create additional test cases, and add to them to create_tests_for_free_span().
+
 
 def create_tests_for_free_span() -> dict:
     """Create and return a number of test cases for the free_spans function"""
@@ -28,7 +28,7 @@ def create_tests_for_free_span() -> dict:
         start_str="12:00",  # Search interval starts
         end_str="11:00",  # Search interval ends
         booking_data=["07:00-09:00", "13:00-18:00"],  # This day's appointments
-        exp_result=[]
+        exp_result=[],
     )  # Expected invalid input
 
     # Start time same time as end time
@@ -78,7 +78,7 @@ def create_tests_for_free_span() -> dict:
         start_str="05:00",
         end_str="21:00",
         booking_data=["06:00-08:00", "10:00-11:00", "14:00-15:00"],
-        exp_result=["05:00-06:00", "08:00-10:00", "11:00-14:00", "15:00-21:00"]
+        exp_result=["05:00-06:00", "08:00-10:00", "11:00-14:00", "15:00-21:00"],
     )
 
     # Calander day with 3 appointments with first appointment outside checkspan
@@ -88,7 +88,7 @@ def create_tests_for_free_span() -> dict:
         start_str="09:00",
         end_str="21:00",
         booking_data=["06:00-08:00", "10:00-11:00", "14:00-15:00"],
-        exp_result=["09:00-10:00", "11:00-14:00", "15:00-21:00"]
+        exp_result=["09:00-10:00", "11:00-14:00", "15:00-21:00"],
     )
 
     # Calander day with 3 appointments with last appointment outside checkspan
@@ -98,7 +98,7 @@ def create_tests_for_free_span() -> dict:
         start_str="05:00",
         end_str="13:00",
         booking_data=["06:00-08:00", "10:00-11:00", "14:00-15:00"],
-        exp_result=["05:00-06:00", "08:00-10:00", "11:00-13:00"]
+        exp_result=["05:00-06:00", "08:00-10:00", "11:00-13:00"],
     )
 
     # Calander day with 3 appointments with start time inside appointment
@@ -108,7 +108,7 @@ def create_tests_for_free_span() -> dict:
         start_str="07:00",
         end_str="21:00",
         booking_data=["06:00-08:00", "10:00-11:00", "14:00-15:00"],
-        exp_result=["08:00-10:00", "11:00-14:00", "15:00-21:00"]
+        exp_result=["08:00-10:00", "11:00-14:00", "15:00-21:00"],
     )
 
     # Calander day with 3 appointments with end time inside appointment
@@ -118,7 +118,7 @@ def create_tests_for_free_span() -> dict:
         start_str="05:00",
         end_str="14:30",
         booking_data=["06:00-08:00", "10:00-11:00", "14:00-15:00"],
-        exp_result=["05:00-06:00", "08:00-10:00", "11:00-14:00"]
+        exp_result=["05:00-06:00", "08:00-10:00", "11:00-14:00"],
     )
 
     # Calander day with 3 appointments with both start and end inside appointments
@@ -128,7 +128,7 @@ def create_tests_for_free_span() -> dict:
         start_str="07:00",
         end_str="14:30",
         booking_data=["06:00-08:00", "10:00-11:00", "14:00-15:00"],
-        exp_result=["08:00-10:00", "11:00-14:00"]
+        exp_result=["08:00-10:00", "11:00-14:00"],
     )
 
     # Check for a timespan that is completely covered by a booking
@@ -138,7 +138,7 @@ def create_tests_for_free_span() -> dict:
         start_str="07:00",
         end_str="08:00",
         booking_data=["07:00-08:00"],
-        exp_result=[]
+        exp_result=[],
     )
 
     # Check for a timespan that is completely covered by multiple bookings
@@ -148,7 +148,7 @@ def create_tests_for_free_span() -> dict:
         start_str="07:00",
         end_str="09:00",
         booking_data=["07:00-08:00", "08:00-09:00"],
-        exp_result=[]
+        exp_result=[],
     )
 
     print("Test cases generated.")
@@ -156,7 +156,7 @@ def create_tests_for_free_span() -> dict:
     return test_cases
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Actually run the tests, using the test driver functions
     tests = create_tests_for_free_span()
     run_free_spans_tests(tests)

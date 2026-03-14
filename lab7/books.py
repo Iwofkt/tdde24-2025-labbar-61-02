@@ -1,37 +1,99 @@
 # Encoding: ISO-8859-1
 
-db = [[['författare', ['john', 'zelle']],
-       ['titel', ['python', 'programming', 'an', 'introduction', 'to',
-                  'computer', 'science']],
-       ['År', 2010]],
-      [['författare', ['armen', 'asratian']],
-       ['titel', ['diskret', 'matematik']],
-       ['År', 2012]],
-      [['författare', ['j', 'glenn', 'brookshear']],
-       ['titel', ['computer', 'science', 'an', 'overview']],
-       ['År', 2011]],
-      [['författare', ['john', 'zelle']],
-       ['titel', ['data', 'structures', 'and', 'algorithms', 'using',
-                  'python', 'and', 'c++']],
-       ['År', 2009]],
-      [['författare', ['anders', 'haraldsson']],
-       ['titel', ['programmering', 'i', 'lisp']],
-       ['År', 1993]]]
+db = [
+    [
+        ["fï¿½rfattare", ["john", "zelle"]],
+        [
+            "titel",
+            [
+                "python",
+                "programming",
+                "an",
+                "introduction",
+                "to",
+                "computer",
+                "science",
+            ],
+        ],
+        ["ï¿½r", 2010],
+    ],
+    [
+        ["fï¿½rfattare", ["armen", "asratian"]],
+        ["titel", ["diskret", "matematik"]],
+        ["ï¿½r", 2012],
+    ],
+    [
+        ["fï¿½rfattare", ["j", "glenn", "brookshear"]],
+        ["titel", ["computer", "science", "an", "overview"]],
+        ["ï¿½r", 2011],
+    ],
+    [
+        ["fï¿½rfattare", ["john", "zelle"]],
+        [
+            "titel",
+            [
+                "data",
+                "structures",
+                "and",
+                "algorithms",
+                "using",
+                "python",
+                "and",
+                "c++",
+            ],
+        ],
+        ["ï¿½r", 2009],
+    ],
+    [
+        ["fï¿½rfattare", ["anders", "haraldsson"]],
+        ["titel", ["programmering", "i", "lisp"]],
+        ["ï¿½r", 1993],
+    ],
+]
 
-pattern = [[['författare', ['john', 'zelle']],
-       ['titel', ['python', 'programming', 'an', 'introduction', 'to',
-                  'computer', 'science']],
-       "--"],
-      [['författare', ['armen', 'asratian']],
-       ['titel', ['diskret', 'matematik']],
-       "&"],
-      [['författare', ['j', 'glenn', 'brookshear']],
-       ['titel', ['computer', 'science', 'an', 'overview']],
-       ['År', 2011]],
-      [['författare', ['john', 'zelle']],
-       ['titel', ['data', 'structures', 'and', 'algorithms', 'using',
-                  'python', 'and', 'c++']],
-       ['År', 2009]],
-      [['författare', ['anders', 'haraldsson']],
-       ['&', ['programmering', 'i', 'lisp']],
-       ['År', 1993]]]
+pattern = [
+    [
+        ["fï¿½rfattare", ["john", "zelle"]],
+        [
+            "titel",
+            [
+                "python",
+                "programming",
+                "an",
+                "introduction",
+                "to",
+                "computer",
+                "science",
+            ],
+        ],
+        "--",
+    ],
+    [["fï¿½rfattare", ["armen", "asratian"]], ["titel", ["diskret", "matematik"]], "&"],
+    [
+        ["fï¿½rfattare", ["j", "glenn", "brookshear"]],
+        ["titel", ["computer", "science", "an", "overview"]],
+        ["ï¿½r", 2011],
+    ],
+    [
+        ["fï¿½rfattare", ["john", "zelle"]],
+        [
+            "titel",
+            [
+                "data",
+                "structures",
+                "and",
+                "algorithms",
+                "using",
+                "python",
+                "and",
+                "c++",
+            ],
+        ],
+        ["ï¿½r", 2009],
+    ],
+    [
+        ["fï¿½rfattare", ["anders", "haraldsson"]],
+        ["&", ["programmering", "i", "lisp"]],
+        ["ï¿½r", 1993],
+    ],
+]

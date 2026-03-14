@@ -46,17 +46,15 @@ def show_subject(s: Subject) -> None:
 # =========================================================================
 def show_duration(tr: Duration) -> None:
     """Print the parameter in an appropriate way, with no line break."""
-    print(
-        f"{duration_hour(tr)} hours, "
-        f"{duration_minute(tr)} minutes"
-    )
+    print(f"{duration_hour(tr)} hours, " f"{duration_minute(tr)} minutes")
 
 
 def show_time(t: Time) -> None:
     """Print the parameter in an appropriate way, with no line break."""
     # ...:02 prints two digits, beginning with 0 if the number is less than 10.
     print(
-        f"{hour_number(time_hour(t)):02}:{minute_number(time_minute(t)):02}", end="",
+        f"{hour_number(time_hour(t)):02}:{minute_number(time_minute(t)):02}",
+        end="",
     )
 
 

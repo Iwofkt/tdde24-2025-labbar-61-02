@@ -47,15 +47,13 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan):
 
     def add_timespan(add_ts: TimeSpan, timespan_list: List[TimeSpan]):
         if not timespan_list or time_precedes(
-                ts_start(add_ts), ts_start(timespan_list[0])
+            ts_start(add_ts), ts_start(timespan_list[0])
         ):
             return [add_ts] + timespan_list
         else:
-            return [timespan_list[0]] + add_timespan(add_ts, timespan_list[1:])wr
+            return [timespan_list[0]] + add_timespan(add_ts, timespan_list[1:])
 
-    return new_time_span_seq(
-        add_timespan(ts, tss.time_span_list)
-    )
+    return new_time_span_seq(add_timespan(ts, tss.time_span_list))
 
 
 def tss_iter_spans(tss):

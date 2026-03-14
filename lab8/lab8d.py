@@ -11,7 +11,9 @@ if CHECK_AGAINST_FACIT:
     except:
         print("*" * 100)
         print("*" * 100)
-        print("Kan inte hitta facit; ändra CHECK_AGAINST_FACIT i test_driver.py till False")
+        print(
+            "Kan inte hitta facit; ändra CHECK_AGAINST_FACIT i test_driver.py till False"
+        )
         print("*" * 100)
         print("*" * 100)
         raise

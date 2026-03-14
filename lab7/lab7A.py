@@ -7,7 +7,7 @@ def match(seq: list, pattern: list):
         # True if also empty, otherwise false
         return not seq
 
-    elif pattern[0] == '--':
+    elif pattern[0] == "--":
         # Try match sequence with pattern - first element
         if match(seq, pattern[1:]):
             return True
@@ -24,7 +24,7 @@ def match(seq: list, pattern: list):
     elif not seq:
         return False
 
-    elif pattern[0] == '&':
+    elif pattern[0] == "&":
         # substitute the first element in sequence with & in pattern
         return match(seq[1:], pattern[1:])
 
@@ -38,7 +38,7 @@ def match(seq: list, pattern: list):
     return False
 
 
-def search(pattern:list, seq: list):
+def search(pattern: list, seq: list):
     """
     Returns a list of all elements in a sequence that match the pattern
     """
@@ -54,9 +54,10 @@ def search(pattern:list, seq: list):
 
 # -- EXTRA -- #
 
+
 def deep_search(pattern: list, seq: list):
     """
-        Returns a list of all subsequences in a sequence that match the pattern
+    Returns a list of all subsequences in a sequence that match the pattern
     """
     results = []
 

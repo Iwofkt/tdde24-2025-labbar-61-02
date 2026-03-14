@@ -3,6 +3,7 @@ from cal_ui import calendars
 from cal_booking import *
 from cal_abstraction import *
 
+
 def remove(cal_name: str, d: int, m: str, t1: str) -> None:
     """Book a new appointment in the calendar with the given name."""
     day = new_day(d)

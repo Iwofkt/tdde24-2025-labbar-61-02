@@ -28,7 +28,9 @@ if CHECK_AGAINST_FACIT:
     except:
         print("*" * 100)
         print("*" * 100)
-        print("Kan inte hitta facit; ändra CHECK_AGAINST_FACIT i test_driver.py till False")
+        print(
+            "Kan inte hitta facit; ändra CHECK_AGAINST_FACIT i test_driver.py till False"
+        )
         print("*" * 100)
         print("*" * 100)
         raise
@@ -143,12 +145,12 @@ def test_tss_equals(tss1: TimeSpanSeq, tss2: TimeSpanSeq) -> bool:
 
 
 def store_test_case(
-        test_cases: Dict[int, List],
-        test_nr: int,
-        start_str: str,
-        end_str: str,
-        booking_data: List[str],
-        exp_result: List[str],
+    test_cases: Dict[int, List],
+    test_nr: int,
+    start_str: str,
+    end_str: str,
+    booking_data: List[str],
+    exp_result: List[str],
 ) -> None:
     """
     This function stores information about a single test case that the test case runner

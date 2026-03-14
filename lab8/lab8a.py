@@ -1,14 +1,16 @@
 # This code violates abstraction layers, and should be reimplemented in lab 8A.
 from cal_abstraction import *
 
+
 def ts_equals(ts1: TimeSpan, ts2: TimeSpan):
     """Return true iff the two given TimeSpans are equal."""
 
     ensure_type(ts1, TimeSpan)
     ensure_type(ts2, TimeSpan)
 
-    return (time_equals(ts_start(ts1), ts_start(ts2)) and
-            time_equals(ts_end(ts1), ts_end(ts2)))
+    return time_equals(ts_start(ts1), ts_start(ts2)) and time_equals(
+        ts_end(ts1), ts_end(ts2)
+    )
 
 
 def ts_overlap(ts1: TimeSpan, ts2: TimeSpan) -> bool:
@@ -17,10 +19,11 @@ def ts_overlap(ts1: TimeSpan, ts2: TimeSpan) -> bool:
     ensure_type(ts2, TimeSpan)
 
     return (
-            # TS1 isn't strictly after TS2
-            time_precedes(ts_start(ts1), ts_end(ts2)) and
-            # TS2 isn't strictly after ts1
-            time_precedes(ts_start(ts2), ts_end(ts1))
+        # TS1 isn't strictly after TS2
+        time_precedes(ts_start(ts1), ts_end(ts2))
+        and
+        # TS2 isn't strictly after ts1
+        time_precedes(ts_start(ts2), ts_end(ts1))
     )
 
 
@@ -35,7 +38,7 @@ def ts_overlapping_part(ts1: TimeSpan, ts2: TimeSpan) -> TimeSpan:
 
     # Tips: Det finns både snyggare och *enklare* sätt
     # att göra detta...
-    if time_precedes(ts_start(ts1),ts_start(ts2)):
+    if time_precedes(ts_start(ts1), ts_start(ts2)):
         ts = new_time_span(ts_start(ts2), ts_end(ts1))
     else:
         ts = new_time_span(ts_start(ts1), ts_end(ts2))
@@ -52,7 +55,7 @@ def ts_duration(ts: TimeSpan) -> "Duration":
     start: Time = ts_start(ts)
     duration = new_duration(
         new_hour(hour_number(time_hour(end)) - hour_number(time_hour(start))),
-        new_minute(minute_number(time_minute(end)) - minute_number(time_minute(start)))
+        new_minute(minute_number(time_minute(end)) - minute_number(time_minute(start))),
     )
     return duration
 

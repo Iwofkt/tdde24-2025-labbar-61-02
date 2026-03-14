@@ -4,7 +4,7 @@ def match(seq, pattern):
     """
     if not pattern:
         return not seq
-    elif pattern[0] == '--':
+    elif pattern[0] == "--":
         if match(seq, pattern[1:]):
             return True
         elif not seq:
@@ -13,7 +13,7 @@ def match(seq, pattern):
             return match(seq[1:], pattern)
     elif not seq:
         return False
-    elif pattern[0] == '&':
+    elif pattern[0] == "&":
         return match(seq[1:], pattern[1:])
     elif seq[0] == pattern[0]:
         return match(seq[1:], pattern[1:])

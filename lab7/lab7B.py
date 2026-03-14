@@ -1,4 +1,3 @@
-
 # Deluppgift 1
 def empty_tree_fn():
     return 0
@@ -24,7 +23,7 @@ def contains_key(tree, wanted_key):
     """
     Test if a binary tree contains a certain key
     """
-    
+
     def empty_tree_fn():
         return 0
 
@@ -90,10 +89,7 @@ def tree_depth(tree):
     return traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn)
 
 
-def traverse(tree,
-                   inner_node_fn,
-                   leaf_fn,
-                   empty_tree_fn):
+def traverse(tree, inner_node_fn, leaf_fn, empty_tree_fn):
     """
     Recursively traverses a binary tree
     """
@@ -114,7 +110,9 @@ def traverse(tree,
 
         # Recursively process left and right subtrees
         left_value = traverse(left_subtree(tree), inner_node_fn, leaf_fn, empty_tree_fn)
-        right_value = traverse(right_subtree(tree), inner_node_fn, leaf_fn, empty_tree_fn)
+        right_value = traverse(
+            right_subtree(tree), inner_node_fn, leaf_fn, empty_tree_fn
+        )
 
         return inner_node_fn(key(tree), left_value, right_value)
 

@@ -18,7 +18,8 @@ def split_lists(seq: list, sizes: str):
         raise ValueError
     return return_list
 
-def split_lists_rec(seq:list, sizes:str):
+
+def split_lists_rec(seq: list, sizes: str):
     if seq == []:
         if sizes == []:
             return []

@@ -21,8 +21,15 @@
 # separated in the code below.
 
 from typing import (
-        Type, NamedTuple, List, Callable, Set, Dict, Any,
-        get_origin, get_args
+    Type,
+    NamedTuple,
+    List,
+    Callable,
+    Set,
+    Dict,
+    Any,
+    get_origin,
+    get_args,
 )
 
 # =========================================================================
@@ -30,10 +37,10 @@ from typing import (
 # =========================================================================
 from settings import USE_DEFAULT_DURATION_TYPE, USE_DEFAULT_TIMESPAN_TYPE
 
-
 # =========================================================================
 #  1. General machinery for testing types and other conditions.
 # =========================================================================
+
 
 def ensure(val, pred) -> None:
     """Assert that the given value satisfies the given predicate."""
@@ -42,18 +49,19 @@ def ensure(val, pred) -> None:
 
 def ensure_type(val, some_type: Type) -> None:
     """
-        Assert that the given value is of the given type.
+    Assert that the given value is of the given type.
 
-        Only handles X, List[X], Dict[X, Y]. Where X and Y are types handled by
-        `ensure_type()` or are "simple" types.
+    Only handles X, List[X], Dict[X, Y]. Where X and Y are types handled by
+    `ensure_type()` or are "simple" types.
 
-        Some examples of "simple" types are: str, int, float, bool.
+    Some examples of "simple" types are: str, int, float, bool.
     """
     origin = get_origin(some_type)
     if origin is not None:
         # This is a nested type.
-        assert type(val) is origin, f"Value {val} is of type {type(val)}; " \
-                                    f"expected type {some_type}."
+        assert type(val) is origin, (
+            f"Value {val} is of type {type(val)}; " f"expected type {some_type}."
+        )
         args = get_args(some_type)
         if args and origin is list:
             element_type = args[0]
@@ -72,8 +80,9 @@ def ensure_type(val, some_type: Type) -> None:
             assert False, f"Cannot check the given type {some_type}"
     elif some_type is not Any:
         # 'Simple' type.
-        assert type(val) is some_type, f"Value {val} is of type {type(val)}; " \
-                                       f"expected type {some_type}."
+        assert type(val) is some_type, (
+            f"Value {val} is of type {type(val)}; " f"expected type {some_type}."
+        )
 
 
 # =========================================================================
@@ -155,6 +164,7 @@ def time_minute(time: Time) -> Minute:
 
 # ---- Time: Functionality independent of the representation ----
 
+
 def new_time_from_string(s: str) -> Time:
     """
     Create and return a new Time with the given Hour and Minute,
@@ -221,7 +231,6 @@ if USE_DEFAULT_TIMESPAN_TYPE:
     # the TimeSpan type!
     TimeSpan = NamedTuple("TimeSpan", [("start", Time), ("end", Time)])
 
-
     def new_time_span(start: Time, end: Time) -> TimeSpan:
         """
         Create and return a new TimeSpan with the given start and end time.
@@ -232,16 +241,16 @@ if USE_DEFAULT_TIMESPAN_TYPE:
         if time_equals(start, end):
             raise ValueError(f"Start and end time are the same, {start}, {end}.")
         elif not time_precedes(start, end):
-            raise ValueError(f"Start time {start} must strictly precede the end time {end}.")
+            raise ValueError(
+                f"Start time {start} must strictly precede the end time {end}."
+            )
         else:
             return TimeSpan(start, end)
-
 
     def ts_start(ts: TimeSpan) -> Time:
         """Return the start of a TimeSpan"""
         ensure_type(ts, TimeSpan)
         return ts.start
-
 
     def ts_end(ts: TimeSpan) -> Time:
         """Return the end of a TimeSpan"""
@@ -257,8 +266,8 @@ else:
         """
         A dictionary representation of TimeSpans.
         """
-        pass
 
+        pass
 
     def new_time_span(start: Time, end: Time) -> TimeSpan:
         """
@@ -270,21 +279,22 @@ else:
         if time_equals(start, end):
             raise ValueError(f"Start and end time are the same, {start}, {end}.")
         elif not time_precedes(start, end):
-            raise ValueError(f"Start time {start} must strictly precede the end time {end}.")
+            raise ValueError(
+                f"Start time {start} must strictly precede the end time {end}."
+            )
         else:
             return TimeSpan(dict(start=start, end=end))
-
 
     def ts_start(ts: TimeSpan) -> Time:
         """Return the start of a TimeSpan"""
         ensure_type(ts, TimeSpan)
         return ts["start"]
 
-
     def ts_end(ts: TimeSpan) -> Time:
         """Return the end of a TimeSpan"""
         ensure_type(ts, TimeSpan)
         return ts["end"]
+
 
 # ---- TimeSpan: Functionality independent of the representation ----
 
@@ -300,20 +310,19 @@ if USE_DEFAULT_DURATION_TYPE:
     # See also TimeSpan comments above.
     Duration = NamedTuple("Duration", [("hour", Hour), ("minute", Minute)])
 
-
     def new_duration(hour: Hour, minute: Minute) -> Duration:
         """Create a duration corresponding to given number of hours and minutes.
         You may specify more than 59 minutes; any multiple of 60 minutes will be
         converted to hours."""
-        return Duration(Hour(hour_number(hour) + minute_number(minute) // 60),
-                        Minute(minute_number(minute) % 60))
-
+        return Duration(
+            Hour(hour_number(hour) + minute_number(minute) // 60),
+            Minute(minute_number(minute) % 60),
+        )
 
     def duration_hour(dur: Duration) -> Hour:
         """Return the number of whole hours in a Duration"""
         ensure_type(dur, Duration)
         return dur.hour
-
 
     def duration_minute(dur: Duration) -> Minute:
         """Return the number of minutes in a Duration
@@ -327,25 +336,23 @@ else:
 
     Duration = NamedTuple("Duration", [("minutes", Minute)])
 
-
     def new_duration(hour: Hour, minute: Minute) -> Duration:
         """Create a duration corresponding to given number of hours and minutes.
         You may specify more than 59 minutes; any multiple of 60 minutes will be
         converted to hours."""
         return Duration(new_minute(hour_number(hour) * 60 + minute_number(minute)))
 
-
     def duration_hour(dur: Duration) -> Hour:
         """Return the number of whole hours in a Duration"""
         ensure_type(dur, Duration)
         return new_hour(minute_number(dur.minutes) // 60)
-
 
     def duration_minute(dur: Duration) -> Minute:
         """Return the number of minutes in a Duration
         (0 to 59, not including whole hours)"""
         ensure_type(dur, Duration)
         return new_minute(minute_number(dur.minutes) % 60)
+
 
 # ---- Duration: Functionality independent of the representation ----
 
@@ -360,10 +367,10 @@ from lab8a import *
 
 def new_duration_from_string(s: str) -> Duration:
     """Create a duration corresponding to the string "HH:MM". The string must be
-     well-formed and the number of hours can consist of an arbitrary number of digits."""
+    well-formed and the number of hours can consist of an arbitrary number of digits."""
     pos = s.find(":")
     hour = int(s[0:pos])
-    minute = int(s[pos + 1:])
+    minute = int(s[pos + 1 :])
     return new_duration(new_hour(hour), new_minute(minute))
 
 
@@ -569,6 +576,7 @@ def cd_day(cal_day: CalendarDay) -> Day:
 # We don't provide a way of retrieving the list of appointments.
 # Instead, we provide a way of *iterating* over all appointments.
 
+
 def cd_iter_appointments(cal_day: CalendarDay):
     """To be used as `for appointment in cd_iter_appointments(cal_day)"""
     # For the purpose of TDDE24, you do not necessarily have to know exactly how this works.
@@ -596,7 +604,7 @@ def cd_plus_appointment(cal_day: CalendarDay, appointment: Appointment) -> Calen
 
     def add_appointment(app: Appointment, appointments: List[Appointment]):
         if not appointments or time_precedes(
-                ts_start(app_span(app)), ts_start(app_span(appointments[0]))
+            ts_start(app_span(app)), ts_start(app_span(appointments[0]))
         ):
             return [app] + appointments
         else:
@@ -618,7 +626,7 @@ as a parameter, and that returns a boolean value (True or False).
 
 
 def cd_any_appointment_satisfies(
-        cal_day: CalendarDay, predicate: AppointmentPredicate
+    cal_day: CalendarDay, predicate: AppointmentPredicate
 ) -> bool:
     """
     Does any appointment during the given calendar day satisfy the
@@ -629,8 +637,7 @@ def cd_any_appointment_satisfies(
     condition.
     """
     ensure_type(cal_day, CalendarDay)
-    return any(predicate(appointment)
-               for appointment in cd_iter_appointments(cal_day))
+    return any(predicate(appointment) for appointment in cd_iter_appointments(cal_day))
 
 
 # ----- CalendarMonth  -----
@@ -814,7 +821,9 @@ def cy_plus_cm(cal_year: CalendarYear, cal_mon: CalendarMonth) -> CalendarYear:
 
     month_to_insert = cm_month(cal_mon)
 
-    def add_to(months: List[CalendarMonth], month_to_add: CalendarMonth) -> List[CalendarMonth]:
+    def add_to(
+        months: List[CalendarMonth], month_to_add: CalendarMonth
+    ) -> List[CalendarMonth]:
         if not months:
             return [month_to_add]
 
@@ -874,7 +883,7 @@ def test_ensure_type() -> None:
     ensure_type(time1, Time)
     ensure_type([time1, time2], List[Time])
     ensure_type({"a": time1, "b": time2}, Dict[str, Time])
-    ensure_type({"a": {1:1}, "b": {2:2}}, Dict[str, Dict[int, int]])
+    ensure_type({"a": {1: 1}, "b": {2: 2}}, Dict[str, Dict[int, int]])
     ts = new_time_span(time1, time2)
     ensure_type(ts, TimeSpan)
     ensure_type([[ts]], List[List[TimeSpan]])
@@ -931,8 +940,7 @@ def test_timespan_duration() -> None:
     time1 = new_time(new_hour(10), new_minute(15))
     time2 = new_time(new_hour(13), new_minute(30))
     span1 = new_time_span(time1, time2)
-    span2 = new_time_span(new_time_from_string("12:10"),
-                          new_time_from_string("15:45"))
+    span2 = new_time_span(new_time_from_string("12:10"), new_time_from_string("15:45"))
 
     assert time_equals(ts_start(span1), time1)
     assert time_equals(ts_end(span1), time2)
@@ -942,17 +950,24 @@ def test_timespan_duration() -> None:
 
     overlap = ts_overlapping_part(span1, span2)
 
-    assert ts_equals(overlap, new_time_span(new_time(new_hour(12), new_minute(10)),
-                                            new_time(new_hour(13), new_minute(30))))
+    assert ts_equals(
+        overlap,
+        new_time_span(
+            new_time(new_hour(12), new_minute(10)),
+            new_time(new_hour(13), new_minute(30)),
+        ),
+    )
 
-    assert duration_equals(ts_duration(overlap), new_duration(new_hour(1), new_minute(20)))
+    assert duration_equals(
+        ts_duration(overlap), new_duration(new_hour(1), new_minute(20))
+    )
     assert duration_equals(ts_duration(span1), new_duration_from_string("3:15"))
     assert duration_equals(ts_duration(span2), new_duration_from_string("3:35"))
 
     print("test_timespan_duration: All tests passed.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_ensure_type()
     test_time()
     test_timespan_duration()

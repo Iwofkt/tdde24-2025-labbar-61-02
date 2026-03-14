@@ -1,4 +1,3 @@
-
 def split_by_first(seq: list[str]):
 
     return_list = {}
@@ -13,4 +12,7 @@ def split_by_first(seq: list[str]):
 
 
 if __name__ == "__main__":
-    assert split_by_first(['apa', 'bepa', 'arg']) == {'a': ['apa', 'arg'], 'b': ['bepa']}
+    assert split_by_first(["apa", "bepa", "arg"]) == {
+        "a": ["apa", "arg"],
+        "b": ["bepa"],
+    }
