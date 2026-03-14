@@ -44,7 +44,7 @@ def tss_plus_span(tss: TimeSpanSeq, ts: TimeSpan):
         ):
             return [add_ts] + timespan_list
         else:
-            return [timespan_list[0]] + add_timespan(add_ts, timespan_list[1:])
+            return [timespan_list[0]] + add_timespan(add_ts, timespan_list[1:])wr
 
     return new_time_span_seq(
         add_timespan(ts, tss.time_span_list)
