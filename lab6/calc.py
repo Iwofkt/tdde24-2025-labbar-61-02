@@ -7,7 +7,7 @@
 
 
 def is_program(p):
-    return isinstance(p, list) and len(p) > 1 and p[0] == 'calc'
+    return isinstance(p, list) and len(p) > 1 and p[0] == "calc"
 
 
 def program_statements(p):
@@ -52,7 +52,7 @@ def is_statement(s):
 
 
 def is_assignment(p):
-    return isinstance(p, list) and len(p) == 3 and p[0] == 'set'
+    return isinstance(p, list) and len(p) == 3 and p[0] == "set"
 
 
 def assignment_variable(p):
@@ -67,7 +67,7 @@ def assignment_expression(p):
 
 
 def is_repetition(p):
-    return isinstance(p, list) and len(p) > 2 and p[0] == 'while'
+    return isinstance(p, list) and len(p) > 2 and p[0] == "while"
 
 
 def repetition_condition(p):
@@ -82,7 +82,7 @@ def repetition_statements(p):
 
 
 def is_selection(p):
-    return isinstance(p, list) and (3 <= len(p) <= 4) and p[0] == 'if'
+    return isinstance(p, list) and (3 <= len(p) <= 4) and p[0] == "if"
 
 
 def selection_condition(p):
@@ -105,7 +105,7 @@ def selection_false_branch(p):
 
 
 def is_input(p):
-    return isinstance(p, list) and len(p) == 2 and p[0] == 'read'
+    return isinstance(p, list) and len(p) == 2 and p[0] == "read"
 
 
 def input_variable(p):
@@ -116,7 +116,7 @@ def input_variable(p):
 
 
 def is_output(p):
-    return isinstance(p, list) and len(p) == 2 and p[0] == 'print'
+    return isinstance(p, list) and len(p) == 2 and p[0] == "print"
 
 
 def output_expression(p):
@@ -171,14 +171,14 @@ def condition_right(p):
 
 
 def is_binaryoper(p):
-    return p in ['+', '-', '*', '/']
+    return p in ["+", "-", "*", "/"]
 
 
 # ----- CONDOPER -----
 
 
 def is_condoper(p):
-    return p in ['<', '>', '=']
+    return p in ["<", ">", "="]
 
 
 # ----- VARIABLE -----
@@ -186,6 +186,7 @@ def is_condoper(p):
 
 def is_variable(p):
     return isinstance(p, str) and p != ""
+
 
 # ----- CONSTANT -----
 

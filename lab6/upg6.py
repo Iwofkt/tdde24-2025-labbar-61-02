@@ -172,7 +172,8 @@ def exec_input(statement, table: dict):
         except ValueError:
             raise Exception(
                 f"Error: Invalid input '{user_input}'"
-                f"for variable '{variable}'." "Expected a number."
+                f"for variable '{variable}'."
+                "Expected a number."
             )
 
     # Deepcopy to avoid modifying original table
@@ -239,13 +240,13 @@ def eval_binaryexpr(expression, table: dict):
     left_val = eval_expr(left_expr, table)
     right_val = eval_expr(right_expr, table)
 
-    if binop == '+':
+    if binop == "+":
         return left_val + right_val
-    elif binop == '-':
+    elif binop == "-":
         return left_val - right_val
-    elif binop == '*':
+    elif binop == "*":
         return left_val * right_val
-    elif binop == '/':
+    elif binop == "/":
         return left_val / right_val
 
 
@@ -279,12 +280,13 @@ def eval_condition(expression, table: dict):
     left_val = eval_expr(left_expr, table)
     right_val = eval_expr(right_expr, table)
 
-    if condop == '=':
+    if condop == "=":
         return left_val == right_val
-    elif condop == '<':
+    elif condop == "<":
         return left_val < right_val
-    elif condop == '>':
+    elif condop == ">":
         return left_val > right_val
+
 
 if __name__ == "__main__":
     upg6_tests(exec_program)
