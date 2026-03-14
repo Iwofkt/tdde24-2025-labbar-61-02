@@ -1,4 +1,5 @@
 from cal_abstraction import *
+from cal_output import show_ts
 from typing import NamedTuple
 
 # =========================================================================
@@ -21,13 +22,19 @@ def new_time_span_seq(span_list=None) -> TimeSpanSeq:
     """
     if span_list is None:
         return TimeSpanSeq(time_span_list=[])
-    return TimeSpanSeq(time_span_list=span_list)
+
+    # Check so that the span_list actually is a list and nothing else
+    elif isinstance(span_list, List):
+        return TimeSpanSeq(time_span_list=span_list)
+
+    raise TypeError
 
 
 def tss_is_empty(tss: TimeSpanSeq):
     """
     Check if time span sequence is empty
     """
+    ensure_type(tss, TimeSpanSeq)
     return not tss.time_span_list
 
 
@@ -56,6 +63,7 @@ def tss_iter_spans(tss):
     Return the time span list in a sequence
     """
     ensure_type(tss, TimeSpanSeq)
+
     for time_span in tss.time_span_list:
         yield time_span
 
@@ -65,7 +73,8 @@ def show_time_spans(tss):
     print a time span sequence
     """
     for time_span in tss_iter_spans(tss):
-        print(time_span)
+        show_ts(time_span)
+        print("")
 
 
 # Keep only time spans that satisfy pred.
